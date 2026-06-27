@@ -140,7 +140,7 @@ private:
         if (!foundAny) fail("classe de caracteres vazia");
         if (negated) {
             std::set<unsigned char> complement;
-            for (unsigned int value = 0; value < kAlphabetSize; ++value) {
+            for (unsigned int value = 0; value < tamanhoAlfabeto; ++value) {
                 if (!symbols.count(static_cast<unsigned char>(value))) {
                     complement.insert(static_cast<unsigned char>(value));
                 }
@@ -291,7 +291,7 @@ Dfa DirectRegexCompiler::compile(const std::string& expression) const {
     }
 
     Dfa dfa;
-    std::map<std::set<std::size_t>, State> indices;
+    std::map<std::set<std::size_t>, Estado> indices;
     std::queue<std::set<std::size_t>> work;
     indices.emplace(root->first, 0);
     work.push(root->first);
@@ -301,7 +301,7 @@ Dfa DirectRegexCompiler::compile(const std::string& expression) const {
     while (!work.empty()) {
         const auto current = work.front();
         work.pop();
-        const State currentIndex = indices.at(current);
+        const Estado currentIndex = indices.at(current);
         for (const unsigned char symbol : alphabet) {
             std::set<std::size_t> target;
             for (const auto position : current) {
@@ -316,7 +316,7 @@ Dfa DirectRegexCompiler::compile(const std::string& expression) const {
                 if (target.count(markerPosition)) dfa.states[it->second].token = 0;
                 work.push(target);
             }
-            dfa.states[currentIndex].transitions[symbol] = it->second;
+            dfa.states[currentIndex].transicoes[symbol] = it->second;
         }
     }
     return dfa;

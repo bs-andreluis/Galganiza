@@ -2,7 +2,7 @@
 
 Implementação em C++17 do trabalho de Linguagens Formais e Compiladores. O programa lê
 definições regulares, gera e minimiza um AFD para cada padrão, une os AFDs com
-ε-transições (`&` na entrada), determiniza o AFND resultante e usa essa tabela para
+ε-transicoes (`&` na entrada), determiniza o AFND resultante e usa essa tabela para
 classificar os lexemas de um arquivo fonte.
 
 ## Compilação e testes
