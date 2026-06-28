@@ -2,20 +2,23 @@ CXX ?= g++
 CXXFLAGS ?= -std=c++17 -Wall -Wextra -Wpedantic -O2
 CPPFLAGS ?= -Iinclude
 
-LIB_SOURCES = src/automaton.cpp src/regex.cpp src/lexer_generator.cpp
+LIB_SOURCES = src/automatos/afd.cpp src/automatos/afnd.cpp src/automatos/algoritmos.cpp \
+              src/regex/compilador_regex.cpp src/regex/parser.cpp \
+              src/lexico/gerador_lexico.cpp
 
 .PHONY: all test clean
 
-all: gal
+all: galganiza
 
-gal: $(LIB_SOURCES) src/main.cpp
+galganiza: $(LIB_SOURCES) src/main.cpp
 	$(CXX) $(CXXFLAGS) $(CPPFLAGS) $^ -o $@
 
-gal_tests: $(LIB_SOURCES) tests/tests.cpp
+galganiza_testes: $(LIB_SOURCES) testes/testes.cpp
 	$(CXX) $(CXXFLAGS) $(CPPFLAGS) $^ -o $@
 
-test: gal_tests
-	./gal_tests
+test: galganiza_testes
+	./galganiza_testes
 
 clean:
-	rm -f gal gal_tests
+	rm -f galganiza galganiza_testes
+	rm -rf build

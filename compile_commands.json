@@ -1,0 +1,50 @@
+[
+{
+  "directory": "/home/kauanfank/codes/Faculdade/Formais/LexAnalyzerGenerator/build",
+  "command": "/usr/bin/c++  -I/home/kauanfank/codes/Faculdade/Formais/LexAnalyzerGenerator/include -std=c++17 -Wall -Wextra -Wpedantic -o CMakeFiles/galganiza_lib.dir/src/automatos/afd.cpp.o -c /home/kauanfank/codes/Faculdade/Formais/LexAnalyzerGenerator/src/automatos/afd.cpp",
+  "file": "/home/kauanfank/codes/Faculdade/Formais/LexAnalyzerGenerator/src/automatos/afd.cpp",
+  "output": "CMakeFiles/galganiza_lib.dir/src/automatos/afd.cpp.o"
+},
+{
+  "directory": "/home/kauanfank/codes/Faculdade/Formais/LexAnalyzerGenerator/build",
+  "command": "/usr/bin/c++  -I/home/kauanfank/codes/Faculdade/Formais/LexAnalyzerGenerator/include -std=c++17 -Wall -Wextra -Wpedantic -o CMakeFiles/galganiza_lib.dir/src/automatos/afnd.cpp.o -c /home/kauanfank/codes/Faculdade/Formais/LexAnalyzerGenerator/src/automatos/afnd.cpp",
+  "file": "/home/kauanfank/codes/Faculdade/Formais/LexAnalyzerGenerator/src/automatos/afnd.cpp",
+  "output": "CMakeFiles/galganiza_lib.dir/src/automatos/afnd.cpp.o"
+},
+{
+  "directory": "/home/kauanfank/codes/Faculdade/Formais/LexAnalyzerGenerator/build",
+  "command": "/usr/bin/c++  -I/home/kauanfank/codes/Faculdade/Formais/LexAnalyzerGenerator/include -std=c++17 -Wall -Wextra -Wpedantic -o CMakeFiles/galganiza_lib.dir/src/automatos/algoritmos.cpp.o -c /home/kauanfank/codes/Faculdade/Formais/LexAnalyzerGenerator/src/automatos/algoritmos.cpp",
+  "file": "/home/kauanfank/codes/Faculdade/Formais/LexAnalyzerGenerator/src/automatos/algoritmos.cpp",
+  "output": "CMakeFiles/galganiza_lib.dir/src/automatos/algoritmos.cpp.o"
+},
+{
+  "directory": "/home/kauanfank/codes/Faculdade/Formais/LexAnalyzerGenerator/build",
+  "command": "/usr/bin/c++  -I/home/kauanfank/codes/Faculdade/Formais/LexAnalyzerGenerator/include -std=c++17 -Wall -Wextra -Wpedantic -o CMakeFiles/galganiza_lib.dir/src/regex/compilador_regex.cpp.o -c /home/kauanfank/codes/Faculdade/Formais/LexAnalyzerGenerator/src/regex/compilador_regex.cpp",
+  "file": "/home/kauanfank/codes/Faculdade/Formais/LexAnalyzerGenerator/src/regex/compilador_regex.cpp",
+  "output": "CMakeFiles/galganiza_lib.dir/src/regex/compilador_regex.cpp.o"
+},
+{
+  "directory": "/home/kauanfank/codes/Faculdade/Formais/LexAnalyzerGenerator/build",
+  "command": "/usr/bin/c++  -I/home/kauanfank/codes/Faculdade/Formais/LexAnalyzerGenerator/include -std=c++17 -Wall -Wextra -Wpedantic -o CMakeFiles/galganiza_lib.dir/src/regex/parser.cpp.o -c /home/kauanfank/codes/Faculdade/Formais/LexAnalyzerGenerator/src/regex/parser.cpp",
+  "file": "/home/kauanfank/codes/Faculdade/Formais/LexAnalyzerGenerator/src/regex/parser.cpp",
+  "output": "CMakeFiles/galganiza_lib.dir/src/regex/parser.cpp.o"
+},
+{
+  "directory": "/home/kauanfank/codes/Faculdade/Formais/LexAnalyzerGenerator/build",
+  "command": "/usr/bin/c++  -I/home/kauanfank/codes/Faculdade/Formais/LexAnalyzerGenerator/include -std=c++17 -Wall -Wextra -Wpedantic -o CMakeFiles/galganiza_lib.dir/src/lexico/gerador_lexico.cpp.o -c /home/kauanfank/codes/Faculdade/Formais/LexAnalyzerGenerator/src/lexico/gerador_lexico.cpp",
+  "file": "/home/kauanfank/codes/Faculdade/Formais/LexAnalyzerGenerator/src/lexico/gerador_lexico.cpp",
+  "output": "CMakeFiles/galganiza_lib.dir/src/lexico/gerador_lexico.cpp.o"
+},
+{
+  "directory": "/home/kauanfank/codes/Faculdade/Formais/LexAnalyzerGenerator/build",
+  "command": "/usr/bin/c++  -I/home/kauanfank/codes/Faculdade/Formais/LexAnalyzerGenerator/include -std=c++17 -o CMakeFiles/galganiza.dir/src/main.cpp.o -c /home/kauanfank/codes/Faculdade/Formais/LexAnalyzerGenerator/src/main.cpp",
+  "file": "/home/kauanfank/codes/Faculdade/Formais/LexAnalyzerGenerator/src/main.cpp",
+  "output": "CMakeFiles/galganiza.dir/src/main.cpp.o"
+},
+{
+  "directory": "/home/kauanfank/codes/Faculdade/Formais/LexAnalyzerGenerator/build",
+  "command": "/usr/bin/c++  -I/home/kauanfank/codes/Faculdade/Formais/LexAnalyzerGenerator/include -std=c++17 -o CMakeFiles/galganiza_testes.dir/testes/testes.cpp.o -c /home/kauanfank/codes/Faculdade/Formais/LexAnalyzerGenerator/testes/testes.cpp",
+  "file": "/home/kauanfank/codes/Faculdade/Formais/LexAnalyzerGenerator/testes/testes.cpp",
+  "output": "CMakeFiles/galganiza_testes.dir/testes/testes.cpp.o"
+}
+]

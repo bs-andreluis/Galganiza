@@ -5,12 +5,16 @@ Requisitos: compilador compatível com C++17 e `make` (ou CMake 3.16+).
 ```bash
 make
 make test
-./gal exemplos/identificadores.er exemplos/fonte_identificadores.txt tokens.txt tabelas
+# tokens só no stdout:
+./galganiza exemplos/identificadores.er exemplos/fonte_identificadores.txt
+# tokens no stdout e também salvos em tokens.txt:
+./galganiza exemplos/identificadores.er exemplos/fonte_identificadores.txt tokens.txt
 ```
 
-Arquivos produzidos:
+Os tokens são sempre impressos no `stdout`. Arquivos produzidos:
 
-- `tokens.txt`: pares `<lexema, padrão>` e eventuais `<lexema, erro!>`;
+- `tokens.txt` (opcional, só se o terceiro argumento for informado): pares
+  `<lexema, padrão>` e eventuais `<lexema, erro!>`;
 - `tabelas/afd_N_nome.tsv`: AFD minimizado de cada expressão regular;
 - `tabelas/tabela_analise_lexica.tsv`: AFD final obtido após união por ε e determinização.
 

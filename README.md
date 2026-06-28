@@ -23,20 +23,22 @@ make test
 ## Execução
 
 ```bash
-./build/gal definicoes.er fonte.txt tokens.txt [diretorio-das-tabelas]
+./build/galganiza definicoes.er fonte.txt [tokens.txt]
 ```
 
 Exemplo:
 
 ```bash
-./build/gal exemplos/identificadores.er \
-  exemplos/fonte_identificadores.txt tokens.txt tabelas
+./build/galganiza exemplos/identificadores.er \
+  exemplos/fonte_identificadores.txt tokens.txt
 ```
 
-O resultado tem o formato `<lexema, padrão>`; uma palavra não reconhecida produz
-`<lexema, erro!>`. O quarto argumento é opcional e vale `tabelas` por padrão. Nesse
-diretório são escritos os AFDs individuais minimizados e a tabela final em TSV, formato
-que pode ser aberto diretamente em editores de texto ou planilhas.
+O resultado é sempre impresso na saída padrão (`stdout`) no formato `<lexema, padrão>`;
+uma palavra não reconhecida produz `<lexema, erro!>`. O terceiro argumento `tokens.txt`
+é opcional: quando informado, a mesma saída também é gravada nesse arquivo; quando
+omitido, os tokens aparecem apenas no `stdout`. As tabelas são sempre escritas no
+diretório `tabelas/`, onde ficam os AFDs individuais minimizados e a tabela final em
+formato TSV.
 
 ## Sintaxe das expressões regulares
 
@@ -64,12 +66,12 @@ descrição e à saída pretendida no anexo (palavras iniciadas por `a` ou por `
 
 ## Organização
 
-- `regex.cpp`: parser e construção direta de AFD pelo algoritmo de Aho, com
+- namespace `regex`: parser e construção direta de AFD pelo algoritmo de Aho, com
   `nullable`, `firstpos`, `lastpos` e `followpos`.
-- `automaton.cpp`: minimização, união por ε-transição, determinização, reconhecimento e
-  visualização tabular.
-- `lexer_generator.cpp`: fachada de projeto/execução do analisador léxico.
-- `tests/` e `exemplos/`: testes independentes e conjuntos variados para avaliação.
+- namespace `automatos`: minimização, união por ε-transição, determinização, reconhecimento e
+  visualização da tabela.
+- namespace `lexico`: analisador léxico.
+- `testes/` e `exemplos/`: testes independentes e conjuntos variados para avaliação.
 
 O arquivo fonte é tratado como um conjunto de lexemas separados por espaço em branco,
 tal como especificado e exemplificado no enunciado.

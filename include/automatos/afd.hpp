@@ -1,8 +1,3 @@
-/*
-    Classe de Automato finito determinístico. 
-    Cada estado transiciona para apenas um outro estado, não há transicoes epsilon. 
-    Estados são representados como 'size_t', isso e tamanhoAlfabeto advém do arquivo `common.hpp`.
-*/
 #pragma once
 #include "common.hpp"
 #include <array>
@@ -11,11 +6,18 @@
 #include <string>
 
 namespace automatos{
+    /*
+        Cada estado transiciona para apenas um outro estado, não há transicoes epsilon.
+        Cada estado associa um token opcional da entrada ER (Número do token, nullopt = não há). 
+    */
     struct EstadoAFD {
         std::array<std::optional<Estado>, tamanhoAlfabeto> transicoes{};
         std::optional<std::size_t> token;
     };
     
+    /*
+        Classe de Automato finito determinístico. 
+    */
     class AFD {
         public:
         Estado inicio{0};
