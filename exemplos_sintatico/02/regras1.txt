@@ -1,0 +1,12 @@
+P -> K V C
+K -> c K
+K -> c
+K -> 
+V -> V v
+V -> F a
+V -> v
+F -> f P d F
+F -> 
+C -> b V C e
+C -> C k
+C -> 

@@ -1,0 +1,4 @@
+<palabra, id>
+<+, +>
+<palavra, id>
+<), )>
