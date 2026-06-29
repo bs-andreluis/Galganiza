@@ -13,12 +13,18 @@ add_library(galganiza_lib
     src/regex/compilador_regex.cpp
     src/regex/parser.cpp
     src/lexico/gerador_lexico.cpp
+    src/sintatico/grammar.cpp
+    src/sintatico/parser.cpp
+    src/sintatico/tabelaSimbolos.cpp
 )
 target_include_directories(galganiza_lib PUBLIC include)
 target_compile_options(galganiza_lib PRIVATE -Wall -Wextra -Wpedantic)
 
-add_executable(galganiza src/main.cpp)
-target_link_libraries(galganiza PRIVATE galganiza_lib)
+add_executable(galganiza_lexico src/main_lexico.cpp)
+target_link_libraries(galganiza_lexico PRIVATE galganiza_lib)
+
+add_executable(galganiza_sintatico src/main_sintatico.cpp)
+target_link_libraries(galganiza_sintatico PRIVATE galganiza_lib)
 
 enable_testing()
 add_executable(galganiza_testes testes/testes.cpp)

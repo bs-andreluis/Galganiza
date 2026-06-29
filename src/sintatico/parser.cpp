@@ -1,14 +1,17 @@
-#include "parser/parser.hpp"
-#include "parser/grammar.hpp"
+#include "sintatico/parser.hpp"
+#include "sintatico/grammar.hpp"
 
+#include <fstream>
+#include <iostream>
 #include <sstream>
+#include <stdexcept>
 
 // le o arquivo de regras e prepara para a insercao no grammar
 // le a tabela de simbolos e retorna a ordem
 
 using namespace std;
 
-namespace parser {
+namespace sintatico {
 	void Parser::carregar_regras(string caminho) {
 		ifstream in(caminho);
 

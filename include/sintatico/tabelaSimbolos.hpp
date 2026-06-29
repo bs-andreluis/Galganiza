@@ -1,11 +1,13 @@
 #pragma once
 
-#include <bits/stdc++.h>
-
+#include <cstddef>
+#include <map>
+#include <string>
+#include <vector>
 
 using namespace std;
 
-namespace parser {
+namespace sintatico {
 	class TabelaSimbolos {
 		map<string,int> tabelaSimbolos_indexer;
 		vector<string> tabela;

@@ -20,17 +20,28 @@ make
 make test
 ```
 
+A compilação gera dois executáveis: `galganiza_lexico` (analisador léxico) e
+`galganiza_sintatico` (analisador sintático). Pelo `make`, os binários se chamam
+`lexico` e `sintatico`.
+
 ## Execução
 
 ```bash
-./build/galganiza definicoes.er fonte.txt [tokens.txt]
+./build/galganiza_lexico definicoes.er fonte.txt [tokens.txt]
 ```
 
 Exemplo:
 
 ```bash
-./build/galganiza exemplos/identificadores.er \
+./build/galganiza_lexico exemplos/identificadores.er \
   exemplos/fonte_identificadores.txt tokens.txt
+```
+
+O analisador sintático lê as regras, palavras reservadas e tokens de
+`exemplos_sintatico/` e executa a análise SLR:
+
+```bash
+./build/galganiza_sintatico
 ```
 
 O resultado é sempre impresso na saída padrão (`stdout`) no formato `<lexema, padrão>`;
@@ -71,6 +82,7 @@ descrição e à saída pretendida no anexo (palavras iniciadas por `a` ou por `
 - namespace `automatos`: minimização, união por ε-transição, determinização, reconhecimento e
   visualização da tabela.
 - namespace `lexico`: analisador léxico.
+- namespace `sintatico`: analisador sintático SLR (gramática, parser e tabela de símbolos).
 - `testes/` e `exemplos/`: testes independentes e conjuntos variados para avaliação.
 
 O arquivo fonte é tratado como um conjunto de lexemas separados por espaço em branco,

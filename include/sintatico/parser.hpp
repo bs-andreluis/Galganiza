@@ -1,14 +1,17 @@
 #pragma once
 
-#include <bits/stdc++.h>
-#include <parser/grammar.hpp>
-#include <parser/tabelaSimbolos.hpp>
+#include <cstddef>
+#include <string>
+#include <vector>
+
+#include <sintatico/grammar.hpp>
+#include <sintatico/tabelaSimbolos.hpp>
 
 using namespace std;
 
 
 
-namespace parser {
+namespace sintatico {
 	struct RawProduction {
 		string head;
 		vector<string> body;

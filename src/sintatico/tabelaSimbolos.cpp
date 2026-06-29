@@ -1,8 +1,10 @@
-#include "parser/tabelaSimbolos.hpp"
+#include "sintatico/tabelaSimbolos.hpp"
+
+#include <iostream>
 
 using namespace std;
 
-namespace parser {
+namespace sintatico {
 	int TabelaSimbolos::verifica_token(string v) {
 		if (tabelaSimbolos_indexer.count(v)) return tabelaSimbolos_indexer[v];
 		return -1;

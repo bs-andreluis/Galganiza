@@ -1,5 +1,5 @@
 #include "automatos/algoritmos.hpp"
-#include "parser/parser.hpp"
+#include "sintatico/parser.hpp"
 #include "lexico/gerador_lexico.hpp"
 #include "regex/compilador_regex.hpp"
 #include "regex/regex.hpp"
@@ -102,7 +102,7 @@ void testarParserCarregarRegras() {
         "E -> T\n"
         "T -> id\n");
 
-    parser::Parser parser;
+    sintatico::Parser parser;
     parser.carregar_regras(regras.string());
 
     const auto raw = parser.get_regras();
@@ -123,7 +123,7 @@ void testarParserCarregarPalavrasReservadas() {
         "while\n"
         "return\n");
 
-    parser::Parser parser;
+    sintatico::Parser parser;
     parser.carregar_palavras_reservadas(palavras.string());
 
     assert(parser.quantReservas == 3);
@@ -149,7 +149,7 @@ void testarParserCarregarTokens() {
         "<while, WHILE>\n"
         "<id, ID>\n");
 
-    parser::Parser parser;
+    sintatico::Parser parser;
     parser.carregar_palavras_reservadas(palavras.string());
     parser.carregar_tokens(tokens.string());
 
@@ -185,7 +185,7 @@ void testarParserSLRCompletoAceitaExpressao() {
         "<while, WHILE>\n"
         "<id, ID>\n");
 
-    parser::Parser parser;
+    sintatico::Parser parser;
     parser.carregar_regras(regras.string());
     parser.carregar_palavras_reservadas(palavras.string());
     parser.carregar_tokens(tokens.string());
@@ -216,7 +216,7 @@ void testarParserMostrarSimbolos() {
         "<id, ID>\n"
         "<while, WHILE>\n");
 
-    parser::Parser parser;
+    sintatico::Parser parser;
     parser.carregar_palavras_reservadas(palavras.string());
     parser.carregar_tokens(tokens.string());
 

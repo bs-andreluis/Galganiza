@@ -1,6 +1,15 @@
-#include <bits/stdc++.h>
-#include "parser/parser.hpp"
-#include "parser/grammar.hpp"
+#include <iomanip>
+#include <iostream>
+#include <map>
+#include <set>
+#include <stdexcept>
+#include <string>
+#include <tuple>
+#include <utility>
+#include <vector>
+
+#include "sintatico/parser.hpp"
+#include "sintatico/grammar.hpp"
 
 // Por convenção:
 // - os nao terminais devem ser escritos em maiuscula e os terminais em minusculas ou outros simbolos;
@@ -12,7 +21,7 @@
 
 using namespace std;
 
-namespace parser {
+namespace sintatico {
 
 void Grammar::build(vector<RawProduction> rawProductions)  {
 	reset();

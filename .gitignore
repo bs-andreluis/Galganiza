@@ -1,6 +1,7 @@
 build/
 tabelas/
 tokens.txt
-/galganiza
+/lexico
+/sintatico
 /galganiza_testes
 *.pdf

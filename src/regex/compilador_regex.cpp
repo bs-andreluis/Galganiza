@@ -113,4 +113,4 @@ namespace regex {
         return afd;
     }
 
-} // namespace gal
+} // namespace regex

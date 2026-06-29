@@ -3,12 +3,16 @@
 Requisitos: compilador compatível com C++17 e `make` (ou CMake 3.16+).
 
 ```bash
-make
+make            # compila os dois executáveis: lexico e sintatico
+make lexico     # compila apenas o analisador léxico
+make sintatico  # compila apenas o analisador sintático
 make test
 # tokens só no stdout:
-./galganiza exemplos/identificadores.er exemplos/fonte_identificadores.txt
+./lexico exemplos/identificadores.er exemplos/fonte_identificadores.txt
 # tokens no stdout e também salvos em tokens.txt:
-./galganiza exemplos/identificadores.er exemplos/fonte_identificadores.txt tokens.txt
+./lexico exemplos/identificadores.er exemplos/fonte_identificadores.txt tokens.txt
+# análise sintática SLR sobre os exemplos em exemplos_sintatico/:
+./sintatico
 ```
 
 Os tokens são sempre impressos no `stdout`. Arquivos produzidos:
