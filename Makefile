@@ -4,21 +4,22 @@ CPPFLAGS ?= -Iinclude
 
 LIB_SOURCES = src/automatos/afd.cpp src/automatos/afnd.cpp src/automatos/algoritmos.cpp \
               src/regex/compilador_regex.cpp src/regex/parser.cpp \
-              src/lexico/gerador_lexico.cpp
+              src/lexico/gerador_lexico.cpp \
+			  src/parser/grammar.cpp src/parser/parser.cpp src/parser/tabelaSimbolos.cpp
 
 .PHONY: all test clean
 
-all: galganiza
+all: parser
 
-galganiza: $(LIB_SOURCES) src/main.cpp
+parser: $(LIB_SOURCES) src/execute_parser.cpp
 	$(CXX) $(CXXFLAGS) $(CPPFLAGS) $^ -o $@
 
-galganiza_testes: $(LIB_SOURCES) testes/testes.cpp
+parser_testes: $(LIB_SOURCES) testes/testes.cpp
 	$(CXX) $(CXXFLAGS) $(CPPFLAGS) $^ -o $@
 
-test: galganiza_testes
-	./galganiza_testes
+test: parser_testes
+	./parser_testes
 
 clean:
-	rm -f galganiza galganiza_testes
+	rm -f parser parser_testes
 	rm -rf build

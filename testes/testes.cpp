@@ -1,13 +1,41 @@
 #include "automatos/algoritmos.hpp"
+#include "parser/parser.hpp"
 #include "lexico/gerador_lexico.hpp"
 #include "regex/compilador_regex.hpp"
 #include "regex/regex.hpp"
 
 #include <cassert>
+#include <chrono>
+#include <filesystem>
+#include <fstream>
+#include <functional>
 #include <iostream>
 #include <sstream>
 
 namespace {
+
+std::filesystem::path criarDiretorioTemporario() {
+    auto base = std::filesystem::temp_directory_path() / "galganiza_parser_testes";
+    auto sufixo = std::to_string(
+        std::chrono::steady_clock::now().time_since_epoch().count());
+    auto dir = base / sufixo;
+    std::filesystem::create_directories(dir);
+    return dir;
+}
+
+void escreverArquivo(const std::filesystem::path& caminho, const std::string& conteudo) {
+    std::ofstream saida(caminho);
+    assert(saida);
+    saida << conteudo;
+}
+
+std::string capturarSaidaStdout(const std::function<void()>& acao) {
+    std::ostringstream buffer;
+    auto* antigo = std::cout.rdbuf(buffer.rdbuf());
+    acao();
+    std::cout.rdbuf(antigo);
+    return buffer.str();
+}
 
 void construcaoDiretaAceitaOperadoresNecessarios() {
     regex::CompiladorRegex compilador;
@@ -66,6 +94,141 @@ void rejeitaInputMalFormatado() {
     assert(rejeitado);
 }
 
+void testarParserCarregarRegras() {
+    auto dir = criarDiretorioTemporario();
+    auto regras = dir / "regras.txt";
+    escreverArquivo(regras,
+        "E -> E + T\n"
+        "E -> T\n"
+        "T -> id\n");
+
+    parser::Parser parser;
+    parser.carregar_regras(regras.string());
+
+    const auto raw = parser.get_regras();
+    assert(raw.size() == 3);
+    assert(raw[0].head == "E");
+    assert((raw[0].body == std::vector<std::string>{"E", "+", "T"}));
+    assert(raw[1].head == "E");
+    assert((raw[1].body == std::vector<std::string>{"T"}));
+    assert(raw[2].head == "T");
+    assert((raw[2].body == std::vector<std::string>{"id"}));
+}
+
+void testarParserCarregarPalavrasReservadas() {
+    auto dir = criarDiretorioTemporario();
+    auto palavras = dir / "palavras.txt";
+    escreverArquivo(palavras,
+        "if\n"
+        "while\n"
+        "return\n");
+
+    parser::Parser parser;
+    parser.carregar_palavras_reservadas(palavras.string());
+
+    assert(parser.quantReservas == 3);
+    assert(parser.tabelaDeSimbolos.tamanho() == 3);
+    assert(parser.tabelaDeSimbolos.get_posicao(0) == "if");
+    assert(parser.tabelaDeSimbolos.get_posicao(1) == "while");
+    assert(parser.tabelaDeSimbolos.get_posicao(2) == "return");
+    assert(parser.tabelaDeSimbolos.verifica_token("if") == 0);
+    assert(parser.tabelaDeSimbolos.verifica_token("return") == 2);
+    assert(parser.tabelaDeSimbolos.verifica_token("else") == -1);
+}
+
+void testarParserCarregarTokens() {
+    auto dir = criarDiretorioTemporario();
+    auto palavras = dir / "palavras.txt";
+    auto tokens = dir / "tokens.txt";
+    escreverArquivo(palavras,
+        "if\n"
+        "while\n");
+    escreverArquivo(tokens,
+        "<if, IF>\n"
+        "<id, ID>\n"
+        "<while, WHILE>\n"
+        "<id, ID>\n");
+
+    parser::Parser parser;
+    parser.carregar_palavras_reservadas(palavras.string());
+    parser.carregar_tokens(tokens.string());
+
+    assert(parser.tabelaDeSimbolos.tamanho() == 3);
+    assert(parser.tabelaDeSimbolos.verifica_token("if") == 0);
+    assert(parser.tabelaDeSimbolos.verifica_token("while") == 1);
+    assert(parser.tabelaDeSimbolos.verifica_token("id") == 2);
+
+    assert(parser.listaTokens.size() == 4);
+    assert(parser.listaTokens[0].token == "IF");
+    assert(parser.listaTokens[0].position == 0);
+    assert(parser.listaTokens[1].token == "ID");
+    assert(parser.listaTokens[1].position == 2);
+    assert(parser.listaTokens[2].token == "WHILE");
+    assert(parser.listaTokens[2].position == 1);
+    assert(parser.listaTokens[3].position == 2);
+}
+
+void testarParserSLRCompletoAceitaExpressao() {
+    auto dir = criarDiretorioTemporario();
+    auto regras = dir / "regras.txt";
+    auto palavras = dir / "palavras.txt";
+    auto tokens = dir / "tokens.txt";
+
+    escreverArquivo(regras,
+        "S -> if id\n");
+    escreverArquivo(palavras,
+        "if\n"
+        "while\n");
+    escreverArquivo(tokens,
+        "<if, IF>\n"
+        "<id, ID>\n"
+        "<while, WHILE>\n"
+        "<id, ID>\n");
+
+    parser::Parser parser;
+    parser.carregar_regras(regras.string());
+    parser.carregar_palavras_reservadas(palavras.string());
+    parser.carregar_tokens(tokens.string());
+
+    parser.gramatica.build(parser.get_regras());
+    auto tabela = parser.gramatica.calcTable();
+
+    bool aceitou = true;
+    try {
+        parser.gramatica.SLRParser({"if", "id", "$"}, tabela);
+    } catch (...) {
+        aceitou = false;
+    }
+
+    assert(aceitou);
+}
+
+void testarParserMostrarSimbolos() {
+    auto dir = criarDiretorioTemporario();
+    auto palavras = dir / "palavras.txt";
+    auto tokens = dir / "tokens.txt";
+
+    escreverArquivo(palavras,
+        "if\n"
+        "while\n");
+    escreverArquivo(tokens,
+        "<if, IF>\n"
+        "<id, ID>\n"
+        "<while, WHILE>\n");
+
+    parser::Parser parser;
+    parser.carregar_palavras_reservadas(palavras.string());
+    parser.carregar_tokens(tokens.string());
+
+    const auto saida = capturarSaidaStdout([&] {
+        parser.mostrar_simbolos();
+    });
+
+    assert(saida.find("<if, PR>") != std::string::npos);
+    assert(saida.find("<while, PR>") != std::string::npos);
+    assert(saida.find("<ID, 2>") != std::string::npos);
+}
+
 } // namespace
 
 int main() {
@@ -74,5 +237,10 @@ int main() {
     testarGeradorLexicoCompleto();
     testarBarraEEpsilon();
     rejeitaInputMalFormatado();
+    testarParserCarregarRegras();
+    testarParserCarregarPalavrasReservadas();
+    testarParserCarregarTokens();
+    testarParserSLRCompletoAceitaExpressao();
+    testarParserMostrarSimbolos();
     std::cout << "Todos os testes passaram.\n";
 }

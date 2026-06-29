@@ -1,0 +1,3 @@
+<palabra, id>
+<+, +>
+<palavra, id>
