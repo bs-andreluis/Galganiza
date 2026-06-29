@@ -1,2 +1,4 @@
-E -> T + T
-T -> id
+T -> T + F
+T -> F
+F -> id
+F -> ( T )

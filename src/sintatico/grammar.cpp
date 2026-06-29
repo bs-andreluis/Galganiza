@@ -31,6 +31,8 @@ void Grammar::build(vector<RawProduction> rawProductions)  {
 	addNonTerminal("START");
 	addProduction("START", {rawProductions[0].head});
 
+	initial_symbol_position = findSymbol(rawProductions[0].head);
+
 	for(auto p: rawProductions) {
 		addProduction(p.head, p.body);
 	}
@@ -116,6 +118,7 @@ pair<vector<set<int>>, vector<int>> Grammar::calcFirsts() {
 				if (ac.type == SymbolType::Terminal) {
 					auto [it, preenchido] = first[p.head].insert(part);
 					mudanca |= preenchido;
+					break;
 				} else {
 					size_t tam = first[p.head].size();
 					first[p.head].insert(first[part].begin(), first[part].end());
@@ -130,7 +133,7 @@ pair<vector<set<int>>, vector<int>> Grammar::calcFirsts() {
 					}
 				}
 			}
-			if (eps && !first_null[p.head]) first_null[p.head] = 1, mudanca = 0;
+			if (eps && !first_null[p.head]) first_null[p.head] = 1, mudanca = 1;
 							
 			if (p.body.empty()) {
 				if (!first_null[p.head])
@@ -147,9 +150,7 @@ vector<set<int>> Grammar::calcFollow() {
 	auto [first, first_null] = calcFirsts();
 
 	// Adiciona end symbol na producao inicial
-	for(int i=0;i<(int)symbols.size();i++) {
-		if (symbols[i].name == "START") follow[i].insert(findSymbol("$"));
-	}
+	follow[initial_symbol_position].insert(findSymbol("$"));
 
 	int mudanca = 1;
 	while (mudanca) {
@@ -159,21 +160,19 @@ vector<set<int>> Grammar::calcFollow() {
 
 			for(auto production: productions) {
 				vector<int> &body = production.body;
-				int i;
-				for(i=0; i<(int)body.size(); i++) {
+				for(int i=0; i<(int)body.size(); i++) {
 					if (body[i] == symbol.index) {
 						int eps = 1;
 						int tam = follow[symbol.index].size();
-						i++;
-						for(;i<(int)body.size();i++) {
-							if (symbols[body[i]].type == SymbolType::Terminal) {
-								follow[symbol.index].insert(body[i]);
+						for(int j= i+1;j<(int)body.size();j++) {
+							if (symbols[body[j]].type == SymbolType::Terminal) {
+								follow[symbol.index].insert(body[j]);
 								eps = 0;
 								break;
 							}
-							follow[symbol.index].insert(first[body[i]].begin(), first[body[i]].end());
+							follow[symbol.index].insert(first[body[j]].begin(), first[body[j]].end());
 
-							if (!first_null[body[i]]) {
+							if (!first_null[body[j]]) {
 								eps = 0;
 								break;
 							}
@@ -273,11 +272,14 @@ vector<vector<Action>> Grammar::calcTable() {
 
 	for(auto [u,v,s]: edge_list) {
 		if (table[u][s].type != ActionType::Error) throw runtime_error("Gramática não é SLR(1).");
-		table[u][s] = {ActionType::Shift, v};
+		if (symbols[s].type == SymbolType::Terminal)
+			table[u][s] = {ActionType::Shift, v};
+		else 
+			table[u][s] = {ActionType::GOTO, v};
 	}
 
 	auto follow = calcFollow();
-	ItemSet finalState = {{productions[0], 1}};
+	
 
 	print_follow(follow);
 
@@ -286,12 +288,13 @@ vector<vector<Action>> Grammar::calcTable() {
 		if (symbols[i].name == "$") idx = i;
 	}
 
+	Item finalState = {productions[0], 1};
 	for(size_t i=0;i<itemSet.size();i++) {
-		if (itemSet[i] == finalState) {
-			table[i][idx] = {ActionType::Accept, 0};
-			continue;
-		}
 		for(auto item: itemSet[i]) {
+			if (item == finalState) {
+				table[i][idx] = {ActionType::Accept, 0};
+			}
+
 			if (item.dot == (int)item.p.body.size()) {
 				for(auto p: follow[item.p.head]) {
 					if (table[i][p].type != ActionType::Error) throw runtime_error("Gramática não é SLR(1).");
@@ -351,14 +354,24 @@ void Grammar::print_collection(vector<ItemSet> collection) {
 void Grammar::print_slr_table(vector<vector<Action>> table) {
 	cout << "SLR table:\n";
 	cout << setw(8) << "State";
+
+	vector<int> symbol_order;
+
 	for (auto &sym : symbols) {
-		cout << setw(10) << sym.name;
+		if (sym.type == SymbolType::Terminal) symbol_order.push_back(sym.index);
+	}
+	for (auto &sym : symbols) {
+		if (sym.type == SymbolType::NonTerminal) symbol_order.push_back(sym.index);
+	}
+
+	for (auto &sym_pos : symbol_order) {
+		cout << setw(10) << symbols[sym_pos].name;
 	}
 	cout << "\n";
 	for (size_t i = 0; i < table.size(); i++) {
 		cout << setw(8) << i;
 		for (size_t j = 0; j < symbols.size(); j++) {
-			auto &action = table[i][j];
+			auto &action = table[i][symbol_order[j]];
 			string cell = ".";
 			if (action.type == ActionType::Shift) {
 				cell = "S" + to_string(action.next);
@@ -366,6 +379,8 @@ void Grammar::print_slr_table(vector<vector<Action>> table) {
 				cell = "R" + to_string(action.next);
 			} else if (action.type == ActionType::Accept) {
 				cell = "acc";
+			} else if (action.type == ActionType::GOTO) {
+				cell = to_string(action.next);
 			}
 			cout << setw(10) << cell;
 		}
@@ -374,6 +389,8 @@ void Grammar::print_slr_table(vector<vector<Action>> table) {
 }
 
 void Grammar::SLRParser (vector<string> w, vector<vector<Action>> table) {
+	print_slr_table(table);
+
 	vector<int> pilha;
 	vector<string> simbolos;
 	pilha.push_back(0);

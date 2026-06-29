@@ -1,3 +1,5 @@
+<(, (>
 <palabra, id>
 <+, +>
 <palavra, id>
+<), )>

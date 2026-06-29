@@ -49,6 +49,7 @@ namespace sintatico {
 
     enum class ActionType {
         Shift,
+        GOTO,
         Reduce,
         Error,
         Accept
@@ -87,6 +88,7 @@ namespace sintatico {
         vector<Symbol> symbols;
         vector<Production> productions;
         map<string, int> symbol_to_index;
+        size_t initial_symbol_position;
 
     public:
         void build(vector<RawProduction> v);
